@@ -9,7 +9,8 @@ package frc.robot;
 
 import java.nio.ByteBuffer;
 
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.ctre.phoenix.motorcontrol.*;
+import com.ctre.phoenix.motorcontrol.can.*;
 import com.revrobotics.ColorMatch;
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
@@ -36,11 +37,13 @@ public class Robot extends TimedRobot {
    * for any initialization code.
    */
 
-  private Spark armMotor = new Spark(6);
-  private Talon pistonMotor = new Talon(1);
-  private Talon motor3 = new Talon(2);
-  private Spark motor4 = new Spark(3);
-  private VictorSPX motor1 = new VictorSPX(5);
+  private VictorSPX motor1 = new VictorSPX(1);
+  private VictorSPX motor2 = new VictorSPX(2);
+  private VictorSPX motor3 = new VictorSPX(3);
+  private VictorSPX motor4 = new VictorSPX(4);
+  private VictorSPX motor6 = new VictorSPX(6);
+  private VictorSPX motor7 = new VictorSPX(7);
+  private VictorSPX motor8 = new VictorSPX(8);
 
   private Joystick joy1 = new Joystick(0);
   //private XboxController button = new XboxController(0);
@@ -94,9 +97,16 @@ public class Robot extends TimedRobot {
     double left = speed + turn;
     double right = speed - turn;
 
-    motor3.set(left);
-    motor4.set(-right);
 
+    double stick = joy2.getRawAxis(1);
+    motor1.set(ControlMode.PercentOutput, stick);
+    motor2.set(ControlMode.PercentOutput, stick);
+    motor3.set(ControlMode.PercentOutput, stick);
+    motor4.set(ControlMode.PercentOutput, stick);
+    motor6.set(ControlMode.PercentOutput, stick);
+    motor7.set(ControlMode.PercentOutput, stick);
+    motor8.set(ControlMode.PercentOutput, stick);
+ 
     double armspeed = joy2.getRawAxis(1);
     double pistonspeed = joy2.getRawAxis(0) * 0.6;
     
@@ -105,27 +115,6 @@ public class Robot extends TimedRobot {
     motor3.set(-left);
     motor4.set(right);
 */
-    if(forwardLimitSwitch.get() == true && pistonspeed < 0){
-      pistonMotor.set(0);
-    }
-    else if(reverseLimitSwitch.get() == true && pistonspeed > 0){
-      pistonMotor.set(0);
-    }
-    else{
-      pistonMotor.set(pistonspeed);
-    }
-
-      if(leftLowerLimitSwitch.get() == true && rightLowerLimitSwitch.get() == true && armspeed < 0){
-        armMotor.set(0);
-      }
-      else if((leftUpperLimitSwitch.get() == true || rightUpperLimitSwitch.get() == true) && armspeed >0){
-        armMotor.set(0);
-      }
-      else{
-      armMotor.set(armspeed);
-      }
-    
-    
       Color detectedColor = m_colorSensor.getColor();
 
     /**
